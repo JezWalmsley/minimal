@@ -32,10 +32,10 @@
 
         [[self minimalView] setTranslatesAutoresizingMaskIntoConstraints:NO];
         [NSLayoutConstraint activateConstraints:@[
-            [self.minimalView.topAnchor constraintEqualToAnchor:self.topAnchor constant:8],
+            [self.minimalView.topAnchor constraintEqualToAnchor:self.topAnchor constant:30],
             [self.minimalView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
             [self.minimalView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-            [self.minimalView.heightAnchor constraintEqualToConstant:2],
+            [self.minimalView.heightAnchor constraintEqualToConstant:30],
         ]];
     }
     
@@ -59,8 +59,8 @@
          [NSLayoutConstraint activateConstraints:@[
             [self.minimalIconView.leadingAnchor constraintEqualToAnchor:self.minimalIconView.leadingAnchor constant:8],
             [self.minimalIconView.centerYAnchor constraintEqualToAnchor:self.minimalIconView.centerYAnchor],
-            [self.minimalIconView.heightAnchor constraintEqualToConstant:2],
-            [self.minimalIconView.widthAnchor constraintEqualToConstant:2],
+            [self.minimalIconView.heightAnchor constraintEqualToConstant:30],
+            [self.minimalIconView.widthAnchor constraintEqualToConstant:30],
         ]];
         
     }
