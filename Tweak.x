@@ -25,16 +25,15 @@
     if (![self minimalView]) {
         self.minimalView = [UIView new];
         [[self minimalView] setClipsToBounds:YES];
-        // [[self minimalView] backgroundColor: [UIColor clearColor]];
         self.minimalView.backgroundColor = [UIColor clearColor]; // Poopy dot syntax
     
         [self addSubview:[self minimalView]];
 
         [[self minimalView] setTranslatesAutoresizingMaskIntoConstraints:NO];
         [NSLayoutConstraint activateConstraints:@[
-            [self.minimalView.topAnchor constraintEqualToAnchor:self.topAnchor constant:30],
-            [self.minimalView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-            [self.minimalView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+            [self.minimalView.topAnchor constraintEqualToAnchor:self.topAnchor constant:-30], // y  axis
+            [self.minimalView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:30], // x axis
+            [self.minimalView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor], 
             [self.minimalView.heightAnchor constraintEqualToConstant:30],
         ]];
     }
@@ -45,16 +44,12 @@
         [[self minimalIconView] setImage:[[self icons] objectAtIndex:0]];
         [[self minimalIconView] setContentMode:UIViewContentModeScaleAspectFit];
         [[self minimalIconView] setClipsToBounds:YES];
-        [[self minimalView] addSubview:[self minimalIconView]]; // yet to add minimal view
+        [[self minimalView] addSubview:[self minimalIconView]]; 
         
         // Constaints
         // https://gist.github.com/Luki120/ee994ddca38ab693944eee9a503bb475
 
         [[self minimalIconView] setTranslatesAutoresizingMaskIntoConstraints:NO];
-        // self.minimalIconView = [[UIImageView alloc] init];
-        // [self addSubview:self.minimalIconView];
-        // self.minimalIconView.translatesAutoresizingMaskIntoConstraints = NO;
-        // [self.minimalIconView.topAnchor constraintEqualToAnchor: [self topAnchor]].active = YES;
 
          [NSLayoutConstraint activateConstraints:@[
             [self.minimalIconView.leadingAnchor constraintEqualToAnchor:self.minimalIconView.leadingAnchor constant:8],
@@ -63,6 +58,10 @@
             [self.minimalIconView.widthAnchor constraintEqualToConstant:30],
         ]];
         
+        if([self minimalIconView]) {
+            [_UIStatusBarStringView setText:@""];
+        }
+
     }
 
 }
