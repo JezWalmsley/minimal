@@ -1,32 +1,40 @@
 #import <UIKit/UIKit.h>
 
-@interface MTPlatterView : UIView
+@interface _UIStatusBar : UIView
+@property (nonatomic, strong, readwrite) NSMutableDictionary *items;
 @end
 
-@interface MTTitledPlatterView : MTPlatterView
+@interface UIStatusBar_Modern : UIView
+@property (nonatomic, strong, readwrite) _UIStatusBar *statusBar;
 @end
 
-@interface NCNotificationShortLookView : MTTitledPlatterView
-@property(nonatomic, copy)NSArray* icons;
-@property(nonatomic, copy)NSString* title;
-@property(nonatomic, copy)NSString* primaryText;
-@property(nonatomic, copy)NSString* secondaryText;
-@property(nonatomic, retain)UIView* minimalView;
-@property(nonatomic, retain)UIBlurEffect* minimalBlur;
-@property(nonatomic, retain)UIVisualEffectView* minimalBlurView;
-@property(nonatomic, strong)UIImageView* minimalIconView;
-@property(nonatomic, retain)UILabel* minimalTitleLabel;
+@interface _UIStatusBarTimeItem : NSObject
+@property (nonatomic, strong, readwrite) UILabel *timeView;
+@property (nonatomic, strong, readwrite) UILabel *shortTimeView;
+@property (nonatomic, strong, readwrite) UILabel *pillTimeView;
+@property (nonatomic, strong, readwrite) UILabel *dateView;
 @end
 
-@interface UIView (Minimal)
-- (id)_viewControllerForAncestor;
+@interface NCNotificationContent : NSObject
+@property (nonatomic, assign, readonly) UIImage *icon;
 @end
 
-@interface _UIStatusBarStringView
--(void)setText:(id)arg1 ;
+@interface NCNotificationRequest : NSObject
+@property (nonatomic, assign, readonly) NCNotificationContent *content;
 @end
 
-@interface _UIStatusBarTimeItem
--(void)setShortTimeView:(_UIStatusBarStringView *)arg1 ;
--(void)_create_timeView;
+@interface NCNotificationViewController : UIViewController
+@property (nonatomic, strong, readwrite) NCNotificationRequest *notificationRequest;
+@end
+
+@interface SBNotificationPresentableViewController : UIViewController
+@property (nonatomic, assign, readonly) NCNotificationViewController *notificationViewController; 
+@end
+
+@interface MINController : NSObject {}
+@property (nonatomic, readonly, class) MINController *sharedInstance;
+
+@property (nonatomic, strong, readwrite) _UIStatusBar *statusBar;
+@property (nonatomic, strong, readwrite) _UIStatusBar *appStatusBar;
+@property (nonatomic, readonly) NSArray<_UIStatusBar *> *statusBars;
 @end
