@@ -12,6 +12,11 @@
 
     %orig;
 
+    // Add observers
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeStatusBarTime:) name:@"statusBarTime" object:nil];
+
+
     if (![[[self _viewControllerForAncestor] delegate] isKindOfClass:%c(SBNotificationBannerDestination)]) return; // check if the notification is a banner
 
     // Remove the banner
@@ -57,13 +62,25 @@
             [self.minimalIconView.heightAnchor constraintEqualToConstant:30],
             [self.minimalIconView.widthAnchor constraintEqualToConstant:30],
         ]];
-        
-        if([self minimalIconView]) {
-            [_UIStatusBarStringView setText:@""];
+
+        if([self minimalView]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"statusBarTime" object:nil userInfo:nil];
+        } else {
+            %orig;
         }
 
     }
 
+}
+
+%end
+
+%hook _UIStatusBarStringView 
+
+%new
+
+-(void)removeStatusBarTime:(id)text {
+    [text setText:@"AHHHHHHHHH"];
 }
 
 %end

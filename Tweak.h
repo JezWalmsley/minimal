@@ -25,3 +25,8 @@
 @interface _UIStatusBarStringView
 -(void)setText:(id)arg1 ;
 @end
+
+@interface _UIStatusBarTimeItem
+-(void)setShortTimeView:(_UIStatusBarStringView *)arg1 ;
+-(void)_create_timeView;
+@end
