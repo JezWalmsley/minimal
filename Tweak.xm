@@ -113,11 +113,13 @@
 %hook BNContentViewController
 //Use this to get notifications one at a time
 /*- (void)presentPresentable:(SBNotificationPresentableViewController *)presentable withOptions:(NSUInteger)options userInfo:(id)userInfo {
-	[MINController.sharedInstance showNotification:presentable];
+	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)]) [MINController.sharedInstance showNotification:presentable];
+	else %orig;
 }*/
 
 //Use this to get all notifications simultaniously
 - (void)_addPresentable:(SBNotificationPresentableViewController *)presentable withTransitioningDelegate:(id)transitioningDelegate incrementingTier:(BOOL)incrementingTier {
-	[MINController.sharedInstance showNotification:presentable];
+	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)]) [MINController.sharedInstance showNotification:presentable];
+	else %orig;
 }
 %end
