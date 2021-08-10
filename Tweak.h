@@ -37,4 +37,8 @@
 @property (nonatomic, strong, readwrite) _UIStatusBar *statusBar;
 @property (nonatomic, strong, readwrite) _UIStatusBar *appStatusBar;
 @property (nonatomic, readonly) NSArray<_UIStatusBar *> *statusBars;
+
+@property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
+-(void)handleTapGesture:(id)sender;
+-(void)addTapGesture;
 @end

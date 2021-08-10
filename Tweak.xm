@@ -1,15 +1,20 @@
 #import "Tweak.h"
 
+_UIStatusBar *uiStatusBar;
+
+%group Minimal // For prefs use later
+
 @implementation MINController
 @synthesize statusBar = _statusBar;
 @synthesize appStatusBar = _appStatusBar;
+
 
 + (instancetype)sharedInstance {
 	static MINController *sharedInstance = nil;
 	static dispatch_once_t onceToken;
 	
 	dispatch_once(&onceToken, ^{
-		sharedInstance = [[MINController alloc] init];
+		sharedInstance = [[MINController alloc] init]; // Only runs this once in a sharedInstance
 	});
 	
 	return sharedInstance;
@@ -62,7 +67,7 @@
 				}
 			}
 			
-			[iconView.widthAnchor constraintEqualToConstant:20].active = YES;
+			[iconView.widthAnchor constraintEqualToConstant:30].active = YES;
 			[iconView.heightAnchor constraintEqualToAnchor:iconView.widthAnchor].active = YES;
 			
 			if(timeView) {
@@ -101,11 +106,12 @@
 %end
 
 %hook SBMainDisplaySceneLayoutStatusBarView
+
 - (id)createStatusBarWithFrame:(CGRect)frame interfaceOrientation:(NSInteger)interfaceOrientation reason:(id)reason {
 	UIStatusBar_Modern *result = %orig;
 	
 	MINController.sharedInstance.appStatusBar = result.statusBar;
-	
+
 	return result;
 }
 %end
@@ -122,4 +128,6 @@
 	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)]) [MINController.sharedInstance showNotification:presentable];
 	else %orig;
 }
+%end
+
 %end
