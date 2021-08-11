@@ -39,19 +39,10 @@
 @property (nonatomic, readonly) NSArray<_UIStatusBar *> *statusBars;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
--(void)handleTapGesture:(id)sender;
--(void)addTapGesture;
+- (void)handleTap:(UITapGestureRecognizer *)recognizer {
 @end
 
-@interface NCNotificationShortLookView : MTTitledPlatterView
-@property(nonatomic, copy)NSArray* icons;
-@property(nonatomic, copy)NSString* title;
-@property(nonatomic, copy)NSString* primaryText;
-@property(nonatomic, copy)NSString* secondaryText;
-@property(nonatomic, retain)UIView* notificationView;
-@property(nonatomic, retain)UIBlurEffect* notificationBlur;
-@property(nonatomic, retain)UIVisualEffectView* notificationBlurView;
-@property(nonatomic, retain)UIImageView* notificationIconView;
-@property(nonatomic, retain)UILabel* notificationTitleLabel;
-@property(nonatomic, retain)MarqueeLabel* notificationContentLabel;
+@interface BNContentViewController : UIViewController
+-(void)loadView;
++(void)initialize;
 @end

@@ -202,7 +202,7 @@
         <key>label</key>
         <string>RuntimeOverflow</string>
         <key>twitter</key>
-        <string string="true"/>
+        <string>true</string>
         <key>subtitle</key>
         <string>Developer</string>
       </dict>
@@ -218,7 +218,7 @@
         <key>label</key>
         <string>RuntimeOverflow</string>
         <key>twitter</key>
-        <string string="true"/>
+        <string>true</string>
         <key>subtitle</key>
         <string>Tester</string>
       </dict>

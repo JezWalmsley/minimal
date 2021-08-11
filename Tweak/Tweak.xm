@@ -2,6 +2,8 @@
 
 // %group Minimal // For prefs use later
 
+UIView *timeView = nil;
+
 @implementation MINController
 @synthesize statusBar = _statusBar;
 @synthesize appStatusBar = _appStatusBar;
@@ -48,13 +50,14 @@
 		
 		for(_UIStatusBar *statusBar in statusBars) {
 			UIImageView *iconView = [[UIImageView alloc] initWithImage:notification.notificationViewController.notificationRequest.content.icon];
-			[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showNotificationBanner)];
+			UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
 			iconView.translatesAutoresizingMaskIntoConstraints = NO;
 			iconView.layer.transform = CATransform3DMakeScale(0.01, 0.01, 1);
+			[self addGestureRecognizer:recognizer];
 			[statusBar addSubview:iconView];
 			[iconViews addObject:iconView];
 			
-			UIView *timeView = nil;
+			
 			for(_UIStatusBarTimeItem *timeItem in timeItems) {
 				if([statusBar.items.allValues containsObject:timeItem]) {
 					if(timeItem.timeView.window) timeView = timeItem.timeView;
@@ -115,68 +118,20 @@
 }
 %end
 
-%hook NCNotificationShortLookView 
-	
-%property(nonatomic, retain)UIView* notificationView;
-%property(nonatomic, retain)UIBlurEffect* notificationBlur;
-%property(nonatomic, retain)UIVisualEffectView* notificationBlurView;
-%property(nonatomic, retain)UIImageView* notificationIconView;
-%property(nonatomic, retain)UILabel* notificationTitleLabel;
-%property(nonatomic, retain)MarqueeLabel* notificationContentLabel;
-
--(void)didMoveToWindow {
-	if (![[self _viewControllerForAncestor] respondsToSelector:@selector(delegate)]) return;
-    if (![[[self _viewControllerForAncestor] delegate] isKindOfClass:%c(SBNotificationBannerDestination)]) return; // check if the notification is a banner
-
-	// New notification view 
-
-	if(![self notificationView]) {
-		self.notificationView = [UIView new];
-		[[self notificationView] setClipsToBounds:YES];
-		[[[self notificationView] layer] setCornerRadius:[cornerRadius doubleValue]]; // Prefs
-		[self addSubview:[self notificationView]];
-
-		[[self notificationView] setTranslatesAutoresizingMaskIntoConstraints:NO];
-		[NSLayoutConstraint activateConstraints:@[
-			[self.notificationView.topAnchor constraintEqualToAnchor:self.topAnchor constant:[offsetValue doubleValue]], //Prefs
-            [self.notificationView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-            [self.notificationView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-            [self.notificationView.heightAnchor constraintEqualToConstant:[heightValue doubleValue]], // Prefs
-		]];
-	}
-
-	if (![self minimalIconView]) {
-		self.notificationIconView = [UIImageView new];
-        [[self notificationIconView] setImage:[[self icons] objectAtIndex:0]];
-        [[self notificationIconView] setContentMode:UIViewContentModeScaleAspectFit];
-        [[self notificationIconView] setClipsToBounds:YES];
-        [[[self notificationIconView] layer] setCornerRadius:[iconCornerRadiusValue doubleValue]];
-        [[self notificationView] addSubview:[self notificationIconView]];
-
-        [[self notificationIconView] setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [NSLayoutConstraint activateConstraints:@[
-            [self.notificationIconView.leadingAnchor constraintEqualToAnchor:self.notificationView.leadingAnchor constant:8],
-            [self.notificationIconView.centerYAnchor constraintEqualToAnchor:self.notificationView.centerYAnchor],
-            [self.notificationIconView.heightAnchor constraintEqualToConstant:[heightValue doubleValue] - 13],
-            [self.notificationIconView.widthAnchor constraintEqualToConstant:[heightValue doubleValue] - 13],
-        ]]; 
-	}
-}
-
-// 	%new
-// 	-(void)showNotificationBanner {
-
-// } yet to do
-	
-
-%end
-
 %hook BNContentViewController
 //Use this to get notifications one at a time
 /*- (void)presentPresentable:(SBNotificationPresentableViewController *)presentable withOptions:(NSUInteger)options userInfo:(id)userInfo {
 	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)]) [MINController.sharedInstance showNotification:presentable];
 	else %orig;
 }*/
+
+	%new
+	- (void)handleTap:(UITapGestureRecognizer *)recognizer {
+		if(timeView != nil) {
+			[self loadView];
+		}
+} 
+	
 
 //Use this to get all notifications simultaniously
 - (void)_addPresentable:(SBNotificationPresentableViewController *)presentable withTransitioningDelegate:(id)transitioningDelegate incrementingTier:(BOOL)incrementingTier {
