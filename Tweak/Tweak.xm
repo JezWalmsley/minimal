@@ -117,16 +117,16 @@
 
 %hook NCNotificationShortLookView 
 	
-	%property(nonatomic, retain)UIView* notificationView;
-	%property(nonatomic, retain)UIBlurEffect* notificationBlur;
-	%property(nonatomic, retain)UIVisualEffectView* notificationBlurView;
-	%property(nonatomic, retain)UIImageView* notificationIconView;
-	%property(nonatomic, retain)UILabel* notificationTitleLabel;
-	%property(nonatomic, retain)MarqueeLabel* notificationContentLabel;
+%property(nonatomic, retain)UIView* notificationView;
+%property(nonatomic, retain)UIBlurEffect* notificationBlur;
+%property(nonatomic, retain)UIVisualEffectView* notificationBlurView;
+%property(nonatomic, retain)UIImageView* notificationIconView;
+%property(nonatomic, retain)UILabel* notificationTitleLabel;
+%property(nonatomic, retain)MarqueeLabel* notificationContentLabel;
 
-	-(void)didMoveToWindow {
-		if (![[self _viewControllerForAncestor] respondsToSelector:@selector(delegate)]) return;
-    	if (![[[self _viewControllerForAncestor] delegate] isKindOfClass:%c(SBNotificationBannerDestination)]) return; // check if the notification is a banner
+-(void)didMoveToWindow {
+	if (![[self _viewControllerForAncestor] respondsToSelector:@selector(delegate)]) return;
+    if (![[[self _viewControllerForAncestor] delegate] isKindOfClass:%c(SBNotificationBannerDestination)]) return; // check if the notification is a banner
 
 	// New notification view 
 
@@ -163,10 +163,10 @@
 	}
 }
 
-	%new
-	-(void)showNotificationBanner {
+// 	%new
+// 	-(void)showNotificationBanner {
 
-}
+// } yet to do
 	
 
 %end
