@@ -8,6 +8,13 @@
 @property (nonatomic, strong, readwrite) _UIStatusBar *statusBar;
 @end
 
+@interface UIStatusBarTimeItemView : UIStatusBarDateTimeItemView
+@end
+
+@interface UIStatusBarItemView : UIView
+- (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
+@end
+
 @interface _UIStatusBarTimeItem : NSObject
 @property (nonatomic, strong, readwrite) UILabel *timeView;
 @property (nonatomic, strong, readwrite) UILabel *shortTimeView;
@@ -39,10 +46,11 @@
 @property (nonatomic, readonly) NSArray<_UIStatusBar *> *statusBars;
 
 @property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
-- (void)handleTap:(UITapGestureRecognizer *)recognizer {
+
 @end
 
 @interface BNContentViewController : UIViewController
 -(void)loadView;
+- (void)handleTap:(UITapGestureRecognizer *)recognizer;
 +(void)initialize;
 @end

@@ -51,9 +51,10 @@ UIView *timeView = nil;
 		for(_UIStatusBar *statusBar in statusBars) {
 			UIImageView *iconView = [[UIImageView alloc] initWithImage:notification.notificationViewController.notificationRequest.content.icon];
 			UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+			[[recognizer] setNumberOfTapsRequired:1];
+			[[recognizer] setNumberOfTouchesRequired:1];
 			iconView.translatesAutoresizingMaskIntoConstraints = NO;
 			iconView.layer.transform = CATransform3DMakeScale(0.01, 0.01, 1);
-			[self addGestureRecognizer:recognizer];
 			[statusBar addSubview:iconView];
 			[iconViews addObject:iconView];
 			
@@ -116,6 +117,8 @@ UIView *timeView = nil;
 
 	return result;
 }
+%end
+
 %end
 
 %hook BNContentViewController
