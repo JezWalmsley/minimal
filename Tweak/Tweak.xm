@@ -4,10 +4,6 @@
 
 static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalprefs.plist";
 
-BNContentViewController *Banner;
-UIView *timeView = nil;
-UIView *StatusBarForeground;
-
 @implementation MINController
 @synthesize statusBar = _statusBar;
 @synthesize appStatusBar = _appStatusBar;
@@ -35,7 +31,7 @@ UIView *StatusBarForeground;
 - (void)showNotification:(SBNotificationPresentableViewController *)notification {
 	NSArray<_UIStatusBar *> *statusBars = self.statusBars;
 	NSMutableArray<_UIStatusBarTimeItem *> *timeItems = NSMutableArray.array;
-	NSMutableArray<UIImageView *> *iconViews = NSMutableArray.array;
+	NSMutableArray<MinimalButton *> *iconViews = NSMutableArray.array;
 	
 	for(_UIStatusBar *statusBar in statusBars) {
 		if(statusBar) {
@@ -53,20 +49,14 @@ UIView *StatusBarForeground;
 		for(_UIStatusBarTimeItem *timeItem in timeItems) for(UILabel *label in @[timeItem.timeView, timeItem.shortTimeView, timeItem.pillTimeView, timeItem.dateView]) label.hidden = YES;
 		
 		for(_UIStatusBar *statusBar in statusBars) {
-			UIImageView *iconView = [[UIImageView alloc] initWithImage:notification.notificationViewController.notificationRequest.content.icon];
+			MinimalButton *iconView = [MinimalButton systemButtonWithImage:[notification.notificationViewController.notificationRequest.content.icon imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] target:self action:@selector(handleTap:)];
+			iconView.presentable = notification;
 			iconView.translatesAutoresizingMaskIntoConstraints = NO;
 			iconView.layer.transform = CATransform3DMakeScale(0.01, 0.01, 1);
 			[statusBar addSubview:iconView];
 			[iconViews addObject:iconView];
-			UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:Banner action:@selector(handleTap:)];
-			if(recognizer) NSLog(@"UITapGestureRecognizer Init");
-			NSLog(@"controller: %@", Banner);
-			[recognizer setNumberOfTapsRequired:1];
-			[recognizer setNumberOfTouchesRequired:1];
-			[statusBar addGestureRecognizer:recognizer];
 			
-
-			
+			UIView *timeView = nil;
 			for(_UIStatusBarTimeItem *timeItem in timeItems) {
 				if([statusBar.items.allValues containsObject:timeItem]) {
 					if(timeItem.timeView.window) timeView = timeItem.timeView;
@@ -92,10 +82,12 @@ UIView *StatusBarForeground;
 	}];
 
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+		for(MinimalButton *iconView in iconViews) [iconView.presentable.view removeFromSuperview];
+		
 		[UIView animateWithDuration:0.15 animations:^{
-			for(UIImageView *iconView in iconViews) iconView.layer.transform = CATransform3DMakeScale(0.01, 0.01, 0.01);
+			for(MinimalButton *iconView in iconViews) iconView.layer.transform = CATransform3DMakeScale(0.01, 0.01, 0.01);
 		} completion:^(BOOL finished){
-			for(UIImageView *iconView in iconViews) [iconView removeFromSuperview];
+			for(MinimalButton *iconView in iconViews) [iconView removeFromSuperview];
 			
 			for(_UIStatusBarTimeItem *timeItem in timeItems) for(UILabel *label in @[timeItem.timeView, timeItem.shortTimeView, timeItem.pillTimeView, timeItem.dateView]) label.hidden = NO;
 			
@@ -105,6 +97,16 @@ UIView *StatusBarForeground;
 		}];
 	});
 }
+
+- (void)handleTap:(MinimalButton *)button {
+	UIWindow *window = ((SpringBoard *) UIApplication.sharedApplication).bannerManager.bannerWindow;
+	[window addSubview:button.presentable.view];
+	window.hidden = false;
+}
+@end
+
+@implementation MinimalButton
+@synthesize presentable;
 @end
 
 %hook _UIStatusBar 
@@ -137,23 +139,9 @@ UIView *StatusBarForeground;
 
 %hook BNContentViewController // Handles the notifications
 
-SBNotificationPresentableViewController *presentable;
-
-%new
--(void)handleTap:(UITapGestureRecognizer *)recognizer {
-	Banner = self;
-
-	// if(recognizer.state == UIGestureRecognizerStateEnded) {
-		NSLog(@"TapRecongized");
-		[self.view addSubview:presentable.view];
-	// }
-}
-//Use this to get all notifications simultaniously
 - (void)_addPresentable:(SBNotificationPresentableViewController *)presentable withTransitioningDelegate:(id)transitioningDelegate incrementingTier:(BOOL)incrementingTier {
-	NSLog(@"Notification Banner Shouldn't appear");
 	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)]) [MINController.sharedInstance showNotification:presentable];
 	else %orig;
 }
-%end
 
-// %end
+%end

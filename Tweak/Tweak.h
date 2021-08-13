@@ -1,4 +1,13 @@
 #import <UIKit/UIKit.h>
+#import <SpringBoard/SpringBoard.h>
+
+@interface SBBannerManager : NSObject
+@property UIWindow *bannerWindow;
+@end
+
+@interface SpringBoard ()
+@property (nonatomic, assign, readonly) SBBannerManager *bannerManager;
+@end
 
 @interface _UIStatusBar : UIView
 @property (nonatomic, strong, readwrite) NSMutableDictionary *items;
@@ -38,8 +47,7 @@
 @property (nonatomic, strong, readwrite) _UIStatusBar *appStatusBar;
 @property (nonatomic, readonly) NSArray<_UIStatusBar *> *statusBars;
 
-@property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
-
+- (void)showNotification:(SBNotificationPresentableViewController *)notification;
 @end
 
 @interface BNContentViewController : UIViewController
@@ -52,4 +60,8 @@
 
 @interface _UIStatusBarForegroundView : UIView
 @property(nonatomic, retain)UIView* statusBarForegroundView;
+@end
+
+@interface MinimalButton : UIButton
+@property (nonatomic, strong, readwrite) SBNotificationPresentableViewController *presentable;
 @end
