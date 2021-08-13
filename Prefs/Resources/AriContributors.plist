@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Lead Developer</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>GcTwitterCell</string>
+			<key>accountLabel</key>
+			<string>Jez</string>
+			<key>account</key>
+			<string>Jez</string>
+			<key>URL</key>
+			<string>https://avatars.githubusercontent.com/u/63314555?v=4</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Wizard</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>GcTwitterCell</string>
+			<key>accountLabel</key>
+			<string>RuntimeOverflow</string>
+			<key>account</key>
+			<string>RuntimeOverflow</string>
+			<key>URL</key>
+			<string>https://avatars.githubusercontent.com/u/38386956?v=4</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Switch With Info Cell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Pretty Twitter Cells</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>cellClass</key>
+			<string>GcTwitterCell</string>
+			<key>accountLabel</key>
+			<string>MrGcGamer</string>
+			<key>account</key>
+			<string>MrGcGamer</string>
+			<key>URL</key>
+			<string>https://avatars.githubusercontent.com/u/32813275?v=4</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Minimal</string>
+</dict>
+</plist>

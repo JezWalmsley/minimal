@@ -2,7 +2,11 @@
 
 // %group Minimal // For prefs use later
 
+static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalprefs.plist";
+
+BNContentViewController *Banner;
 UIView *timeView = nil;
+UIView *StatusBarForeground;
 
 @implementation MINController
 @synthesize statusBar = _statusBar;
@@ -43,21 +47,25 @@ UIView *timeView = nil;
 		}
 	}
 	
-	[UIView animateWithDuration:0.15 animations:^{
+	[UIView animateWithDuration:0.15 animations:^{ // Adding the icon is here HELLO
 		for(_UIStatusBarTimeItem *timeItem in timeItems) for(UILabel *label in @[timeItem.timeView, timeItem.shortTimeView, timeItem.pillTimeView, timeItem.dateView]) label.layer.transform = CATransform3DMakeScale(0.01, 0.01, 1);
 	} completion:^(BOOL finished){
 		for(_UIStatusBarTimeItem *timeItem in timeItems) for(UILabel *label in @[timeItem.timeView, timeItem.shortTimeView, timeItem.pillTimeView, timeItem.dateView]) label.hidden = YES;
 		
 		for(_UIStatusBar *statusBar in statusBars) {
 			UIImageView *iconView = [[UIImageView alloc] initWithImage:notification.notificationViewController.notificationRequest.content.icon];
-			UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-			[[recognizer] setNumberOfTapsRequired:1];
-			[[recognizer] setNumberOfTouchesRequired:1];
 			iconView.translatesAutoresizingMaskIntoConstraints = NO;
 			iconView.layer.transform = CATransform3DMakeScale(0.01, 0.01, 1);
 			[statusBar addSubview:iconView];
 			[iconViews addObject:iconView];
+			UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:Banner action:@selector(handleTap:)];
+			if(recognizer) NSLog(@"UITapGestureRecognizer Init");
+			NSLog(@"controller: %@", Banner);
+			[recognizer setNumberOfTapsRequired:1];
+			[recognizer setNumberOfTouchesRequired:1];
+			[statusBar addGestureRecognizer:recognizer];
 			
+
 			
 			for(_UIStatusBarTimeItem *timeItem in timeItems) {
 				if([statusBar.items.allValues containsObject:timeItem]) {
@@ -82,7 +90,6 @@ UIView *timeView = nil;
 			}];
 		}
 	}];
-	
 
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
 		[UIView animateWithDuration:0.15 animations:^{
@@ -100,8 +107,17 @@ UIView *timeView = nil;
 }
 @end
 
+%hook _UIStatusBar 
+
+-(void)viewDidLoad {
+	%orig;
+	self.userInteractionEnabled = YES;
+}
+
+%end
 %hook SpringBoard
 - (void)_createStatusBarWithRequestedStyle:(NSInteger)style orientation:(NSInteger)orientation hidden:(BOOL)hidden {
+	
 	%orig;
 	
 	MINController.sharedInstance.statusBar = MSHookIvar<UIStatusBar_Modern *>(self, "_statusBar").statusBar;
@@ -119,25 +135,22 @@ UIView *timeView = nil;
 }
 %end
 
-%end
+%hook BNContentViewController // Handles the notifications
 
-%hook BNContentViewController
-//Use this to get notifications one at a time
-/*- (void)presentPresentable:(SBNotificationPresentableViewController *)presentable withOptions:(NSUInteger)options userInfo:(id)userInfo {
-	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)]) [MINController.sharedInstance showNotification:presentable];
-	else %orig;
-}*/
+SBNotificationPresentableViewController *presentable;
 
-	%new
-	- (void)handleTap:(UITapGestureRecognizer *)recognizer {
-		if(timeView != nil) {
-			[self loadView];
-		}
-} 
-	
+%new
+-(void)handleTap:(UITapGestureRecognizer *)recognizer {
+	Banner = self;
 
+	// if(recognizer.state == UIGestureRecognizerStateEnded) {
+		NSLog(@"TapRecongized");
+		[self.view addSubview:presentable.view];
+	// }
+}
 //Use this to get all notifications simultaniously
 - (void)_addPresentable:(SBNotificationPresentableViewController *)presentable withTransitioningDelegate:(id)transitioningDelegate incrementingTier:(BOOL)incrementingTier {
+	NSLog(@"Notification Banner Shouldn't appear");
 	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)]) [MINController.sharedInstance showNotification:presentable];
 	else %orig;
 }

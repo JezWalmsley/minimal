@@ -8,13 +8,6 @@
 @property (nonatomic, strong, readwrite) _UIStatusBar *statusBar;
 @end
 
-@interface UIStatusBarTimeItemView : UIStatusBarDateTimeItemView
-@end
-
-@interface UIStatusBarItemView : UIView
-- (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer;
-@end
-
 @interface _UIStatusBarTimeItem : NSObject
 @property (nonatomic, strong, readwrite) UILabel *timeView;
 @property (nonatomic, strong, readwrite) UILabel *shortTimeView;
@@ -53,4 +46,10 @@
 -(void)loadView;
 - (void)handleTap:(UITapGestureRecognizer *)recognizer;
 +(void)initialize;
+-(void)_addPresentable:(id)arg1 withTransitioningDelegate:(id)arg2 incrementingTier:(BOOL)arg3; 
+-(BOOL)_canShowWhileLocked;
+@end
+
+@interface _UIStatusBarForegroundView : UIView
+@property(nonatomic, retain)UIView* statusBarForegroundView;
 @end
