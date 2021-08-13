@@ -11,7 +11,7 @@
 @end
 
 
-@interface ArizonaRootListController : PSListController
+@interface MinimalRootListController : PSListController
 @property (nonatomic, retain) NSMutableDictionary *savedSpecifiers;
 @property (nonatomic, retain) UILabel *titleLabel;
 @property (nonatomic, retain) UIView *headerView;
@@ -25,7 +25,7 @@
 @end
 
 
-@interface ArizonaContributorsRootListController : PSListController
+@interface MinimalContributorsRootListController : PSListController
 @end
 
 
@@ -33,5 +33,5 @@
 @end
 
 
-@interface ArizonaTableCell : PSTableCell
+@interface MinimalTableCell : PSTableCell
 @end
