@@ -3,7 +3,7 @@
 
 
 
-static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.Minimalprefs.plist";
+static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalprefs.plist";
 
 
 #define tint [UIColor colorWithRed: 0.02 green: 0.79 blue: 0.95 alpha: 1.00]
@@ -77,9 +77,10 @@ return _specifiers;
 - (void)viewDidLoad {
 
     [super viewDidLoad];
+    
     [self reloadSpecifiers];
 
-    UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/MinimalPrefs.bundle/pogbanner.png"];
+    UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/minimalprefs.bundle/pogbanner.png"];
 	
     self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,UIScreen.mainScreen.bounds.size.width,UIScreen.mainScreen.bounds.size.width * banner.size.height / banner.size.width)];
     self.headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,200,200)];
@@ -99,7 +100,7 @@ return _specifiers;
 
     self.iconView = [[UIImageView alloc] initWithFrame:CGRectMake(0,0,10,10)];
     self.iconView.contentMode = UIViewContentModeScaleAspectFit;
-    self.iconView.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/MinimalPrefs.bundle/icon@2x.png"];
+    self.iconView.image = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/minimalprefs.bundle/icon@2x.png"];
     self.iconView.translatesAutoresizingMaskIntoConstraints = NO;
     self.iconView.alpha = 0.0;
     [self.navigationItem.titleView addSubview:self.iconView];
@@ -369,6 +370,7 @@ return _specifiers;
         self.textLabel.highlightedTextColor = tint;
     }
 }
+
 
 
 @end

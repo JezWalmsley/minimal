@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>MinimalPrefs</string>
 	<key>CFBundleIdentifier</key>
-	<string>me.jez.Minimalprefs</string>
+	<string>me.jez.minimalprefs</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
