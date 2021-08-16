@@ -1,9 +1,5 @@
 #import "Tweak.h"
 
-// %group Minimal // For prefs use later
-
-static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalprefs.plist";
-
 @implementation MINController
 @synthesize statusBar = _statusBar;
 @synthesize appStatusBar = _appStatusBar;
@@ -81,13 +77,14 @@ static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalpre
 		}
 	}];
 
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 6 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
 		for(MinimalButton *iconView in iconViews) [iconView.presentable.view removeFromSuperview];
 		
 		[UIView animateWithDuration:0.15 animations:^{
 			for(MinimalButton *iconView in iconViews) iconView.layer.transform = CATransform3DMakeScale(0.01, 0.01, 0.01);
 		} completion:^(BOOL finished){
 			for(MinimalButton *iconView in iconViews) [iconView removeFromSuperview];
+			NSLog(@"Removed from superview");
 			
 			for(_UIStatusBarTimeItem *timeItem in timeItems) for(UILabel *label in @[timeItem.timeView, timeItem.shortTimeView, timeItem.pillTimeView, timeItem.dateView]) label.hidden = NO;
 			
@@ -99,9 +96,16 @@ static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalpre
 }
 
 - (void)handleTap:(MinimalButton *)button {
-	UIWindow *window = ((SpringBoard *) UIApplication.sharedApplication).bannerManager.bannerWindow;
-	[window addSubview:button.presentable.view];
-	window.hidden = false;
+	button = [[MinimalButton alloc] init];
+	SBNotificationPresentableViewController *viewController = (SBNotificationPresentableViewController *)[[UIApplication sharedApplication] delegate];
+	SBNotificationBannerDestination *bannerDestination = [[%c(SBNotificationBannerDestination) alloc] init];
+
+	// UIWindow *window = ((SpringBoard *) UIApplication.sharedApplication).bannerManager.bannerWindow;
+	[bannerDestination presentableWillAppearAsBanner:viewController.presentable];
+	// [window insertSubview:button.presentable.view atIndex:0];	
+	// window.hidden = false;
+
+	
 }
 @end
 
@@ -113,10 +117,11 @@ static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalpre
 
 -(void)viewDidLoad {
 	%orig;
-	self.userInteractionEnabled = YES;
+	self.userInteractionEnabled = YES; // Lets it be tapped
 }
 
 %end
+
 %hook SpringBoard
 - (void)_createStatusBarWithRequestedStyle:(NSInteger)style orientation:(NSInteger)orientation hidden:(BOOL)hidden {
 	
@@ -125,6 +130,18 @@ static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalpre
 	MINController.sharedInstance.statusBar = MSHookIvar<UIStatusBar_Modern *>(self, "_statusBar").statusBar;
 }
 %end
+
+// %hook SBNotificationBannerDestination
+
+// -(void)_dismissBannerCompleted:(id)arg1 {
+// 	%orig;
+// 	NSLog(@"Banner Dismiss Complete");
+// 	// if (window) {
+// 	// 	window = nil;
+// 	// }
+// }
+
+// %end
 
 %hook SBMainDisplaySceneLayoutStatusBarView
 
@@ -145,3 +162,6 @@ static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalpre
 }
 
 %end
+
+%ctor {
+}

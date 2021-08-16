@@ -38,6 +38,7 @@
 
 @interface SBNotificationPresentableViewController : UIViewController
 @property (nonatomic, assign, readonly) NCNotificationViewController *notificationViewController; 
+@property (nonatomic, strong, readwrite) SBNotificationPresentableViewController *presentable;
 @end
 
 @interface MINController : NSObject {}
@@ -64,4 +65,11 @@
 
 @interface MinimalButton : UIButton
 @property (nonatomic, strong, readwrite) SBNotificationPresentableViewController *presentable;
+@end
+
+@interface SBNotificationBannerDestination : NSObject 
+-(void)_dismissBannerCompleted ;
+-(BOOL)_isPresentingBanner;
+-(void)presentableWillAppearAsBanner:(id)arg1 ;
+-(SBNotificationPresentableViewController *)notification;
 @end
