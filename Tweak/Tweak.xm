@@ -33,14 +33,14 @@ static void fakeNotification(NSString *sectionID, NSDate *date, NSString *messag
     bulletin.sectionID = sectionID;
     bulletin.bulletinID = [[NSProcessInfo processInfo] globallyUniqueString];
     bulletin.recordID = [[NSProcessInfo processInfo] globallyUniqueString];
-    bulletin.publisherBulletinID = [[NSProcessInfo processInfo] globallyUniqueString];
+    bulletin.publisherBulletinID = [NSString stringWithFormat:@"MINIMAL%@", [[NSProcessInfo processInfo] globallyUniqueString]];
     bulletin.date = date;
     bulletin.defaultAction = [%c(BBAction) actionWithLaunchBundleID:sectionID callblock:nil];
     bulletin.clearable = YES;
     bulletin.showsMessagePreview = YES;
     bulletin.publicationDate = date;
     bulletin.lastInterruptDate = date;
-
+	
     if (banner) {
         if ([bbServer respondsToSelector:@selector(publishBulletin:destinations:)]) {
             dispatch_sync(getBBServerQueue(), ^{
@@ -48,7 +48,7 @@ static void fakeNotification(NSString *sectionID, NSDate *date, NSString *messag
             });
         }
     } else {
-        if ([bbServer respondsToSelector:@selector(publishBulletin:destinations:alwaysToLockScreen:)]) {
+		if ([bbServer respondsToSelector:@selector(publishBulletin:destinations:alwaysToLockScreen:)]) {
             dispatch_sync(getBBServerQueue(), ^{
                 [bbServer publishBulletin:bulletin destinations:4 alwaysToLockScreen:YES];
             });
@@ -58,14 +58,6 @@ static void fakeNotification(NSString *sectionID, NSDate *date, NSString *messag
             });
         }
     }
-
-}
-
-void minimalNotification() {
-
-    fakeNotification(@"com.apple.Preferences", [NSDate date], @"Minimal Test", true);
-	isBanner = TRUE;
-
 }
 
 @implementation MINController
@@ -146,8 +138,6 @@ void minimalNotification() {
 	}];
 
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-		for(MinimalButton *iconView in iconViews) [iconView.presentable.view removeFromSuperview];
-		
 		[UIView animateWithDuration:0.15 animations:^{
 			for(MinimalButton *iconView in iconViews) iconView.layer.transform = CATransform3DMakeScale(0.01, 0.01, 0.01);
 		} completion:^(BOOL finished){
@@ -163,10 +153,7 @@ void minimalNotification() {
 }
 
 - (void)handleTap:(MinimalButton *)button {
-	// UIWindow *window = ((SpringBoard *) UIApplication.sharedApplication).bannerManager.bannerWindow;
-	// [window addSubview:button.presentable.view];
-	// window.hidden = false;
-	minimalNotification();
+	fakeNotification(@"com.apple.Preferences", [NSDate date], @"Minimal Test", true);
 }
 @end
 
@@ -233,8 +220,14 @@ void minimalNotification() {
 %hook BNContentViewController // Handles the notifications
 
 - (void)_addPresentable:(SBNotificationPresentableViewController *)presentable withTransitioningDelegate:(id)transitioningDelegate incrementingTier:(BOOL)incrementingTier {
-	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)]) [MINController.sharedInstance showNotification:presentable];
+	BBBulletin *bulletin = presentable.notificationViewController.notificationRequest.bulletin;
+	
+	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)] && ![bulletin.publisherBulletinID hasPrefix:@"MINIMAL"]) [MINController.sharedInstance showNotification:presentable];
 	else %orig;
+	
+	for(UIView *view in self.viewIfLoaded.subviews) {
+		if(view != presentable.viewIfLoaded) [view removeFromSuperview];
+	}
 }
 
 %end
