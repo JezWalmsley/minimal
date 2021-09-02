@@ -221,9 +221,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 %hook BNContentViewController // Handles the notifications
 
 - (void)_addPresentable:(SBNotificationPresentableViewController *)presentable withTransitioningDelegate:(id)transitioningDelegate incrementingTier:(BOOL)incrementingTier {
-	BBBulletin *bulletin = presentable.notificationViewController.notificationRequest.bulletin;
-
-	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)] && ![bulletin.publisherBulletinID hasPrefix:@"MINIMAL"]) {
+	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)] && ![presentable.notificationViewController.notificationRequest.bulletin.publisherBulletinID hasPrefix:@"MINIMAL"]) {
 		[MINController.sharedInstance showNotification:presentable];
 	} else %orig;
 	
