@@ -24,11 +24,11 @@ static dispatch_queue_t getBBServerQueue() {
 
 }
 
-static void fakeNotification(NSString *sectionID, NSDate *date, NSString *message, bool banner) {
+static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date, NSString *message, bool banner) {
     
 	BBBulletin* bulletin = [[%c(BBBulletin) alloc] init];
 
-	bulletin.title = @"Minimal button tap";
+	bulletin.title = title;
     bulletin.message = message;
     bulletin.sectionID = sectionID;
     bulletin.bulletinID = [[NSProcessInfo processInfo] globallyUniqueString];
@@ -137,7 +137,7 @@ static void fakeNotification(NSString *sectionID, NSDate *date, NSString *messag
 		}
 	}];
 
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 6 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
 		[UIView animateWithDuration:0.15 animations:^{
 			for(MinimalButton *iconView in iconViews) iconView.layer.transform = CATransform3DMakeScale(0.01, 0.01, 0.01);
 		} completion:^(BOOL finished){
@@ -153,7 +153,8 @@ static void fakeNotification(NSString *sectionID, NSDate *date, NSString *messag
 }
 
 - (void)handleTap:(MinimalButton *)button {
-	fakeNotification(@"com.apple.Preferences", [NSDate date], @"Minimal Test", true);
+	BBBulletin *bulletin = button.presentable.notificationViewController.notificationRequest.bulletin;
+	fakeNotification([bulletin title], [bulletin section], [NSDate date], [bulletin message], true);
 }
 @end
 
@@ -220,10 +221,9 @@ static void fakeNotification(NSString *sectionID, NSDate *date, NSString *messag
 %hook BNContentViewController // Handles the notifications
 
 - (void)_addPresentable:(SBNotificationPresentableViewController *)presentable withTransitioningDelegate:(id)transitioningDelegate incrementingTier:(BOOL)incrementingTier {
-	BBBulletin *bulletin;
+	BBBulletin *bulletin = presentable.notificationViewController.notificationRequest.bulletin;
 
 	if([presentable isKindOfClass:%c(SBNotificationPresentableViewController)] && ![bulletin.publisherBulletinID hasPrefix:@"MINIMAL"]) {
-		bulletin = presentable.notificationViewController.notificationRequest.bulletin;
 		[MINController.sharedInstance showNotification:presentable];
 	} else %orig;
 	
