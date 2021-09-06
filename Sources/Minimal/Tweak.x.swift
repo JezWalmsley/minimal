@@ -2,8 +2,6 @@ import Orion
 import UIKit
 import MinimalC
 
-var wasAdded = false
-
 class NCNotificationDispatcherHook : ClassHook<NCNotificationDispatcher> {
     
     func postNotificationWithRequest(_ arg1: NCNotificationRequest?) {

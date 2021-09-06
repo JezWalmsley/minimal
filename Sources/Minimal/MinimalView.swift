@@ -3,15 +3,24 @@ import MinimalC
 
 class MinimalView: UIView {
     
-    var stackView: UIStackView!
+    var stackView: UIStackView = UIStackView()
+    var imagesViewPool: [UIImageView]!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-                
-        stackView = UIStackView()
         self.addSubview(stackView)
+
         
-        stackView.spacing = 1
+        // Initialize UIImageViews
+        imagesViewPool = (0...5).map { _ in UIImageView() }
+        imagesViewPool.forEach({
+            stackView.addArrangedSubview($0)
+            $0.heightAnchor.constraint(equalToConstant: 10).isActive = true
+            $0.widthAnchor.constraint(equalToConstant: 10).isActive = true
+            $0.contentMode = .scaleAspectFit
+        })
+        
+        stackView.spacing = 0
         stackView.distribution = .equalSpacing
         stackView.alignment = .center
         stackView.axis = .horizontal
@@ -31,12 +40,7 @@ class MinimalView: UIView {
     }
     
     func update() {
-        for subview in stackView.arrangedSubviews {
-            stackView.removeArrangedSubview(subview)
-            subview.isHidden = true
-        }
-        
-        
+        imagesViewPool.forEach({$0.isHidden = true})
         
         let maxIcons = Int(floor(self.frame.width / (10 + stackView.spacing)))
         let iconsCount = MinimalController.sharedInstance.bundles.count > maxIcons ? maxIcons : MinimalController.sharedInstance.bundles.count
@@ -45,23 +49,12 @@ class MinimalView: UIView {
             return
         }
                 
-//        for bundle in MinimalController.sharedInstance.bundles {
-//            let iconView = UIImageView(image: bundle.icon)
-//            stackView.addArrangedSubview(iconView)
-//            iconView.contentMode = .scaleAspectFit
-//
-//            iconView.heightAnchor.constraint(equalToConstant: 10).isActive = true
-//            iconView.widthAnchor.constraint(equalToConstant: 10).isActive = true
-//        }
-        
+        // TODO: Improve pool
         for i in 0...iconsCount - 1 {
             let bundle = MinimalController.sharedInstance.bundles[i]
-            let iconView = UIImageView(image: bundle.icon)
-            stackView.addArrangedSubview(iconView)
-            iconView.contentMode = .scaleAspectFit
-            
-            iconView.heightAnchor.constraint(equalToConstant: 10).isActive = true
-            iconView.widthAnchor.constraint(equalToConstant: 10).isActive = true
+            let imageView = imagesViewPool[i]
+            imageView.image = bundle.icon
+            imageView.isHidden = false
         }
 
     }
