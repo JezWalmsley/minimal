@@ -1,0 +1,4 @@
+module MinimalC {
+    umbrella "."
+    export *
+}

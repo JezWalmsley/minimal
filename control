@@ -1,9 +1,9 @@
-Package: me.jez.minimal
+Package: com.xyaman.minimal
 Name: Minimal
 Version: 0.0.1
 Architecture: iphoneos-arm
-Description: AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-Maintainer: Jez
-Author: Jez
+Description: An awesome Orion tweak!
+Maintainer: Xyaman
+Author: Xyaman
 Section: Tweaks
-Depends: mobilesubstrate (>= 0.9.5000), ws.hbang.common (>= 1.17)
+Depends: ${ORION}, firmware (>= 12.2)

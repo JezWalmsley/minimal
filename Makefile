@@ -1,10 +1,13 @@
-THEOS_DEVICE_IP = 192.168.0.58
-ARCHS = arm64 arm64e
-export TARGET := iphone:clang:latest:14.4
+TARGET := iphone:clang:latest:12.2
 INSTALL_TARGET_PROCESSES = SpringBoard
 
-SUBPROJECTS += Tweak Prefs
 
 include $(THEOS)/makefiles/common.mk
+
+TWEAK_NAME = Minimal
+
+Minimal_FILES = $(shell find Sources/Minimal -name '*.swift') $(shell find Sources/MinimalC -name '*.m' -o -name '*.c' -o -name '*.mm' -o -name '*.cpp')
+Minimal_SWIFTFLAGS = -ISources/MinimalC/include
+Minimal_CFLAGS = -fobjc-arc -ISources/MinimalC/include
+
 include $(THEOS_MAKE_PATH)/tweak.mk
-include $(THEOS_MAKE_PATH)/aggregate.mk
