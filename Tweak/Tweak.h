@@ -1,9 +1,14 @@
 #import <UIKit/UIKit.h>
 #import <dlfcn.h>
+#import <Cephei/HBPreferences.h>
 #import <SpringBoard/SpringBoard.h>
+
+HBPreferences* preferences = nil;
+BOOL enabled = NO;
 
 @interface SBBannerManager : NSObject
 @property UIWindow *bannerWindow;
+-(void)dismissAllBannersAnimated:(BOOL)arg1 reason:(id)arg2 ;
 @end
 
 @interface SpringBoard ()
@@ -106,3 +111,14 @@
 @interface SBNCNotificationDispatcher : NSObject
 - (NCBulletinNotificationSource *)notificationSource;
 @end
+
+@interface SBNotificationBannerDestination : NSObject
+-(void)_cancelDismissTimer;
+-(void)_cancelReplaceAndDismissTimers;
+-(void)_performCancelAction;
+@end
+
+@interface NCNotificationDispatcher : NSObject
+-(void)postNotificationWithRequest:(id)arg1 ;
+@end
+

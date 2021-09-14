@@ -1,10 +1,12 @@
 #import "Tweak.h"
 
-// %group Minimal // For prefs use later
+
+ %group Minimal // For prefs use later
 
 static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalprefs.plist";
 
 static BBServer* bbServer = nil;
+static SBBannerManager *bannerManager = nil;
 
 static dispatch_queue_t getBBServerQueue() {
 
@@ -40,15 +42,14 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
     bulletin.showsMessagePreview = YES;
     bulletin.publicationDate = date;
     bulletin.lastInterruptDate = date;
-	
-    if (banner) {
+	if (banner) {
         if ([bbServer respondsToSelector:@selector(publishBulletin:destinations:)]) {
             dispatch_sync(getBBServerQueue(), ^{
                 [bbServer publishBulletin:bulletin destinations:15];
             });
         }
     } else {
-		if ([bbServer respondsToSelector:@selector(publishBulletin:destinations:alwaysToLockScreen:)]) {
+        if ([bbServer respondsToSelector:@selector(publishBulletin:destinations:alwaysToLockScreen:)]) {
             dispatch_sync(getBBServerQueue(), ^{
                 [bbServer publishBulletin:bulletin destinations:4 alwaysToLockScreen:YES];
             });
@@ -58,6 +59,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
             });
         }
     }
+ 	
 }
 
 @implementation MINController
@@ -125,6 +127,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 			
 			[iconView.widthAnchor constraintEqualToConstant:30].active = YES;
 			[iconView.heightAnchor constraintEqualToAnchor:iconView.widthAnchor].active = YES;
+			[iconView setContentMode:UIViewContentModeScaleAspectFit];
 			
 			if(timeView) {
 				[iconView.centerXAnchor constraintEqualToAnchor:timeView.centerXAnchor].active = YES;
@@ -153,8 +156,11 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 }
 
 - (void)handleTap:(MinimalButton *)button {
+	NSLog(@"Minimal: %@", bannerManager);
+	// [bannerManager dismissAllBannersAnimated:YES reason:0];
+
 	BBBulletin *bulletin = button.presentable.notificationViewController.notificationRequest.bulletin;
-	fakeNotification([bulletin title], [bulletin section], [NSDate date], [bulletin message], true);
+	fakeNotification([bulletin title], [bulletin sectionID], [NSDate date], [bulletin message], true);
 }
 @end
 
@@ -231,3 +237,29 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 }
 
 %end
+
+%hook SBBannerManager 
+
+-(id)init {
+	bannerManager = self;
+
+	return bannerManager;
+}
+
+-(void)dealloc {
+	if (bannerManager == self) bannerManager = nil;
+
+	%orig;
+}
+
+%end
+
+%end
+
+%ctor {
+	// preferences = [[HBPreferences alloc] initWithIdentifier:@"com.jez.minimalPrefs"];
+
+	// [preferences registerBool:&enabled default:YES forKey:@"Enabled"];
+
+	%init(Minimal)
+}
