@@ -5,7 +5,7 @@
 #import <Cephei/HBPreferences.h>
 #import <Cephei/HBRespringController.h>
 
-@interface NOTRootListController : PSListController
+@interface NOTRootListController : HBRootListController
 @property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) UILabel *titleLabel;

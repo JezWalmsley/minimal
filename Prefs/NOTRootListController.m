@@ -3,6 +3,20 @@
 
 @implementation NOTRootListController
 
+- (instancetype) init {
+    self = [super init];
+
+    if (self) {
+        HBAppearanceSettings *appearanceSettings = [[HBAppearanceSettings alloc] init];
+        appearanceSettings.tintColor = [UIColor colorWithRed:(36.0/255.0) green:(132.0/255.0) blue:(128.0/255.0) alpha:1.0];
+        appearanceSettings.tableViewCellSeparatorColor = [UIColor colorWithWhite:0.0 alpha:0.0];
+
+        self.hb_appearanceSettings = appearanceSettings;
+    }
+
+    return self;
+}
+
 - (NSArray *)specifiers {
 	if (!_specifiers) {
 		_specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
@@ -22,6 +36,9 @@
 -(void)viewDidLoad {
 
 	[super viewDidLoad];
+	// add test banner option
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Test banner" style:UIBarButtonItemStyleDone target:self action:@selector(testBanner:)];
+    self.navigationItem.rightBarButtonItem.tintColor = [UIColor colorWithRed:(36.0/255.0) green:(132.0/255.0) blue:(128.0/255.0) alpha:1.0];;
 
 	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/minimalPrefs.bundle/Assets/Banner.png"];
 	self.headerView = [[UIView alloc] initWithFrame:CGRectMake(0,0,UIScreen.mainScreen.bounds.size.width,UIScreen.mainScreen.bounds.size.width * banner.size.height / banner.size.width)];
@@ -81,6 +98,10 @@
 
 	if (offsetY > 0) offsetY = 0;
 	self.headerImageView.frame = CGRectMake(0, offsetY, self.headerView.frame.size.width, 200 - offsetY);
+}
+
+- (void)testBanner:(id)sender {
+    CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), (CFStringRef)@"com.jez.minimalPrefs/TestBanner", nil, nil, true);
 }
 
 @end

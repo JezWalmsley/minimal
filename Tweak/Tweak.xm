@@ -3,10 +3,8 @@
 
  %group Minimal // For prefs use later
 
-static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalprefs.plist";
-
 static BBServer* bbServer = nil;
-static SBBannerManager *bannerManager = nil;
+// static SBBannerManager *bannerManager = nil;
 
 static dispatch_queue_t getBBServerQueue() {
 
@@ -102,6 +100,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 	}
 	
 	[UIView animateWithDuration:0.15 animations:^{ // Adding the icon is here HELLO
+		if (ringerMuted == YES) AudioServicesPlaySystemSound(1521);
 		for(_UIStatusBarTimeItem *timeItem in timeItems) for(UILabel *label in @[timeItem.timeView, timeItem.shortTimeView, timeItem.pillTimeView, timeItem.dateView]) label.layer.transform = CATransform3DMakeScale(0.01, 0.01, 1);
 	} completion:^(BOOL finished){
 		for(_UIStatusBarTimeItem *timeItem in timeItems) for(UILabel *label in @[timeItem.timeView, timeItem.shortTimeView, timeItem.pillTimeView, timeItem.dateView]) label.hidden = YES;
@@ -156,8 +155,6 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 }
 
 - (void)handleTap:(MinimalButton *)button {
-	NSLog(@"Minimal: %@", bannerManager);
-	// [bannerManager dismissAllBannersAnimated:YES reason:0];
 
 	BBBulletin *bulletin = button.presentable.notificationViewController.notificationRequest.bulletin;
 	fakeNotification([bulletin title], [bulletin sectionID], [NSDate date], [bulletin message], true);
@@ -238,28 +235,26 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 
 %end
 
-%hook SBBannerManager 
+%hook SBRingerControl 
 
--(id)init {
-	bannerManager = self;
+- (BOOL)isRingerMuted {
 
-	return bannerManager;
+    ringerMuted = %orig;
+
+    return ringerMuted;
+
 }
 
--(void)dealloc {
-	if (bannerManager == self) bannerManager = nil;
-
-	%orig;
-}
 
 %end
 
 %end
 
 %ctor {
-	// preferences = [[HBPreferences alloc] initWithIdentifier:@"com.jez.minimalPrefs"];
+	preferences = [[HBPreferences alloc] initWithIdentifier:@"com.jez.minimalPrefs"];
 
-	// [preferences registerBool:&enabled default:YES forKey:@"Enabled"];
+	[preferences registerBool:&enabled default:YES forKey:@"Enabled"];
+	if (!enabled) return;
 
 	%init(Minimal)
 }

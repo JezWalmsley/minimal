@@ -1,10 +1,12 @@
 #import <UIKit/UIKit.h>
 #import <dlfcn.h>
 #import <Cephei/HBPreferences.h>
+#import<AudioToolbox/AudioToolbox.h>
 #import <SpringBoard/SpringBoard.h>
 
 HBPreferences* preferences = nil;
 BOOL enabled = NO;
+BOOL ringerMuted = NO; 
 
 @interface SBBannerManager : NSObject
 @property UIWindow *bannerWindow;
@@ -122,3 +124,11 @@ BOOL enabled = NO;
 -(void)postNotificationWithRequest:(id)arg1 ;
 @end
 
+@interface SBRingerControl : NSObject {
+    BOOL _ringerMuted;
+}
+@property (assign,getter=isRingerMuted,nonatomic) BOOL ringerMuted; 
+-(id)initWithHUDController:(id)arg1 soundController:(id)arg2;
+-(void)_softMuteChanged:(id)arg1;
+- (id)ringerMuted:(BOOL)arg1;
+@end
