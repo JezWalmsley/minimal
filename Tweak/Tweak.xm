@@ -4,7 +4,7 @@
  %group Minimal // For prefs use later
 
 static BBServer* bbServer = nil;
-// static SBBannerManager *bannerManager = nil;
+static SBNotificationBannerDestination* bannerDestination = nil;
 
 static dispatch_queue_t getBBServerQueue() {
 
@@ -155,7 +155,6 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 }
 
 - (void)handleTap:(MinimalButton *)button {
-
 	BBBulletin *bulletin = button.presentable.notificationViewController.notificationRequest.bulletin;
 	fakeNotification([bulletin title], [bulletin sectionID], [NSDate date], [bulletin message], true);
 }
@@ -245,6 +244,26 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 
 }
 
+
+%end
+
+%hook SBNotificationBannerDestination
+
+-(id)init {
+
+	bannerDestination = %orig;
+
+	return bannerDestination;
+
+}
+
+-(void)dealloc {
+
+	if (bannerDestination == self) bannerDestination = nil;
+
+    %orig;
+
+}
 
 %end
 

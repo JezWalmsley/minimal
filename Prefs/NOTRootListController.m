@@ -25,19 +25,12 @@
 	return _specifiers;
 }
 
-- (void)respring {
-	if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/shuffle.dylib"]) {
-        [HBRespringController respringAndReturnTo:[NSURL URLWithString:@"prefs:root=Tweaks&path=Minimal"]];
-    } else {
-        [HBRespringController respringAndReturnTo:[NSURL URLWithString:@"prefs:root=Minimal"]];   
-    }	
-}
 
 -(void)viewDidLoad {
 
 	[super viewDidLoad];
-	// add test banner option
-	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Test banner" style:UIBarButtonItemStyleDone target:self action:@selector(testBanner:)];
+	// add respring option
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Respring" style:UIBarButtonItemStyleDone target:self action:@selector(respring:)];
     self.navigationItem.rightBarButtonItem.tintColor = [UIColor colorWithRed:(36.0/255.0) green:(132.0/255.0) blue:(128.0/255.0) alpha:1.0];;
 
 	UIImage *banner = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/minimalPrefs.bundle/Assets/Banner.png"];
@@ -100,8 +93,13 @@
 	self.headerImageView.frame = CGRectMake(0, offsetY, self.headerView.frame.size.width, 200 - offsetY);
 }
 
-- (void)testBanner:(id)sender {
-    CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), (CFStringRef)@"com.jez.minimalPrefs/TestBanner", nil, nil, true);
+- (void)respring:(id)sender {
+	if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/shuffle.dylib"]) {
+        [HBRespringController respringAndReturnTo:[NSURL URLWithString:@"prefs:root=Tweaks&path=Minimal"]];
+    } else {
+        [HBRespringController respringAndReturnTo:[NSURL URLWithString:@"prefs:root=Minimal"]];   
+    }	
 }
+
 
 @end

@@ -8,6 +8,7 @@ HBPreferences* preferences = nil;
 BOOL enabled = NO;
 BOOL ringerMuted = NO; 
 
+
 @interface SBBannerManager : NSObject
 @property UIWindow *bannerWindow;
 -(void)dismissAllBannersAnimated:(BOOL)arg1 reason:(id)arg2 ;
@@ -117,6 +118,7 @@ BOOL ringerMuted = NO;
 @interface SBNotificationBannerDestination : NSObject
 -(void)_cancelDismissTimer;
 -(void)_cancelReplaceAndDismissTimers;
+-(void)_dismissPresentedBannerOnly:(BOOL)arg1 reason:(id)arg2 animated:(BOOL)arg3 forceIfSticky:(BOOL)arg4 ;
 -(void)_performCancelAction;
 @end
 
