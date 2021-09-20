@@ -6,7 +6,11 @@
 
 HBPreferences* preferences = nil;
 BOOL enabled = NO;
-BOOL ringerMuted = NO; 
+BOOL ringerMuted = NO;
+BOOL vibrateOnSilent = YES; 
+static double iconSize = 1.0f;
+int volumeDownPresses = 0;
+NSTimer *atimer = nil;
 
 
 @interface SBBannerManager : NSObject

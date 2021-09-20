@@ -20,7 +20,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Minimal Prefs</string>
+			<string>Enabled/Disabled</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -33,6 +33,54 @@
 			<string>Enabled</string>
 			<key>label</key>
 			<string>Enabled</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Customizations options</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSStaticTextCell</string>
+			<key>label</key>
+			<string>Icon Size</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSliderCell</string>
+			<key>default</key>
+			<real>40</real>
+			<key>defaults</key>
+			<string>com.jez.minimalPrefs</string>
+			<key>key</key>
+			<string>iconSize</string>
+			<key>min</key>
+			<real>1</real>
+			<key>max</key>
+			<real>2</real>
+			<key>showValue</key>
+			<true/>
+			<key>isSegmented</key>
+			<false/>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>com.jez.minimalPrefs</string>
+			<key>key</key>
+			<string>vibrateOnSilent</string>
+			<key>label</key>
+			<string>Vibrate on silent</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Support me :)</string>
 		</dict>
 		<dict>
 			<key>cellClass</key>
@@ -52,7 +100,7 @@
 			<key>subtitle</key>
 			<string>for supporty things</string>
 			<key>url</key>
-			<string>https://discord.gg/iosjbn</string>
+			<string>https://discord.gg/axp4VzygEw</string>
 		</dict>
 	</array>
 	<key>title</key>
