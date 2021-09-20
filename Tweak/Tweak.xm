@@ -1,8 +1,7 @@
 #import "Tweak.h"
 
-// %group Minimal // For prefs use later
 
-static NSString *plistPath = @"/var/mobile/Library/Preferences/me.jez.minimalprefs.plist";
+ %group Minimal // For prefs use later
 
 static BBServer* bbServer = nil;
 
@@ -40,15 +39,14 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
     bulletin.showsMessagePreview = YES;
     bulletin.publicationDate = date;
     bulletin.lastInterruptDate = date;
-	
-    if (banner) {
+	if (banner) {
         if ([bbServer respondsToSelector:@selector(publishBulletin:destinations:)]) {
             dispatch_sync(getBBServerQueue(), ^{
                 [bbServer publishBulletin:bulletin destinations:15];
             });
         }
     } else {
-		if ([bbServer respondsToSelector:@selector(publishBulletin:destinations:alwaysToLockScreen:)]) {
+        if ([bbServer respondsToSelector:@selector(publishBulletin:destinations:alwaysToLockScreen:)]) {
             dispatch_sync(getBBServerQueue(), ^{
                 [bbServer publishBulletin:bulletin destinations:4 alwaysToLockScreen:YES];
             });
@@ -58,6 +56,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
             });
         }
     }
+ 	
 }
 
 @implementation MINController
@@ -100,6 +99,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 	}
 	
 	[UIView animateWithDuration:0.15 animations:^{ // Adding the icon is here HELLO
+		if (ringerMuted == YES && vibrateOnSilent == YES) AudioServicesPlaySystemSound(4095);
 		for(_UIStatusBarTimeItem *timeItem in timeItems) for(UILabel *label in @[timeItem.timeView, timeItem.shortTimeView, timeItem.pillTimeView, timeItem.dateView]) label.layer.transform = CATransform3DMakeScale(0.01, 0.01, 1);
 	} completion:^(BOOL finished){
 		for(_UIStatusBarTimeItem *timeItem in timeItems) for(UILabel *label in @[timeItem.timeView, timeItem.shortTimeView, timeItem.pillTimeView, timeItem.dateView]) label.hidden = YES;
@@ -123,8 +123,10 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 				}
 			}
 			
+			[iconView setContentMode:UIViewContentModeScaleAspectFill];
 			[iconView.widthAnchor constraintEqualToConstant:30].active = YES;
 			[iconView.heightAnchor constraintEqualToAnchor:iconView.widthAnchor].active = YES;
+			
 			
 			if(timeView) {
 				[iconView.centerXAnchor constraintEqualToAnchor:timeView.centerXAnchor].active = YES;
@@ -132,7 +134,8 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 			}
 			
 			[UIView animateWithDuration:0.15 animations:^{
-				iconView.layer.transform = CATransform3DMakeScale(1, 1, 1);
+				iconView.layer.transform = CATransform3DMakeScale(iconSize, iconSize, iconSize);
+	
 			}];
 		}
 	}];
@@ -153,8 +156,12 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 }
 
 - (void)handleTap:(MinimalButton *)button {
-	BBBulletin *bulletin = button.presentable.notificationViewController.notificationRequest.bulletin;
-	fakeNotification([bulletin title], [bulletin section], [NSDate date], [bulletin message], true);
+	static dispatch_once_t once;
+	dispatch_once(&once, ^ {
+      	BBBulletin *bulletin = button.presentable.notificationViewController.notificationRequest.bulletin;
+		fakeNotification([bulletin title], [bulletin sectionID], [NSDate date], [bulletin message], true);  
+	});    
+	
 }
 @end
 
@@ -170,6 +177,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 }
 
 %end
+
 %hook SpringBoard
 - (void)_createStatusBarWithRequestedStyle:(NSInteger)style orientation:(NSInteger)orientation hidden:(BOOL)hidden {
 	
@@ -231,3 +239,31 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 }
 
 %end
+
+%hook SBRingerControl 
+
+- (BOOL)isRingerMuted {
+
+    ringerMuted = %orig;
+
+    return ringerMuted;
+
+}
+
+
+%end
+
+
+%end
+
+%ctor {
+	preferences = [[HBPreferences alloc] initWithIdentifier:@"com.jez.minimalPrefs"];
+
+	[preferences registerBool:&enabled default:NO forKey:@"Enabled"];
+	if (!enabled) return;
+
+	[preferences registerDouble:&iconSize default:1 forKey:@"iconSize"];
+	[preferences registerBool:&vibrateOnSilent default:YES forKey:@"vibrateOnSilent"];
+
+	%init(Minimal)
+}

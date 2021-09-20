@@ -2,8 +2,8 @@ Package: me.jez.minimal
 Name: Minimal
 Version: 0.0.1
 Architecture: iphoneos-arm
-Description: AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+Description: Minimalist look for your notifications!
 Maintainer: Jez
 Author: Jez
 Section: Tweaks
-Depends: mobilesubstrate (>= 0.9.5000), ws.hbang.common (>= 1.17)
+Depends: mobilesubstrate (>= 0.9.5000), ws.hbang.common (>= 1.17), com.mrgcgamer.libgcuniversal

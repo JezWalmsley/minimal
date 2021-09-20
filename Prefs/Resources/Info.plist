@@ -5,9 +5,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>MinimalPrefs</string>
+	<string>minimalPrefs</string>
 	<key>CFBundleIdentifier</key>
-	<string>me.jez.minimalprefs</string>
+	<string>com.jez.minimalPrefs</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -19,6 +19,6 @@
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>NSPrincipalClass</key>
-	<string>MinimalRootListController</string>
+	<string>NOTRootListController</string>
 </dict>
 </plist>

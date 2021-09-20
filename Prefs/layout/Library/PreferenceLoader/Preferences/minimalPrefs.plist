@@ -5,13 +5,13 @@
 	<key>entry</key>
 	<dict>
 		<key>bundle</key>
-		<string>Prefs</string>
+		<string>minimalPrefs</string>
 		<key>cell</key>
 		<string>PSLinkCell</string>
 		<key>detail</key>
-		<string>MinimalRootListController</string>
+		<string>NOTRootListController</string>
 		<key>icon</key>
-		<string>icon.png</string>
+		<string>Minimal.png</string>
 		<key>isController</key>
 		<true/>
 		<key>label</key>
