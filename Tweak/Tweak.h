@@ -10,6 +10,7 @@ BOOL ringerMuted = NO;
 BOOL vibrateOnSilent = YES; 
 static double iconSize = 1.0f;
 int volumeDownPresses = 0;
+NSNumber *dismissDelay = nil;
 NSTimer *atimer = nil;
 
 
