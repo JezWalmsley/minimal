@@ -11,6 +11,7 @@ BOOL vibrateOnSilent = YES;
 static double iconSize = 1.0f;
 int volumeDownPresses = 0;
 NSTimer *atimer = nil;
+static NSInteger hapticsStrength;
 
 
 @interface SBBannerManager : NSObject

@@ -66,6 +66,10 @@
 		</dict>
 		<dict>
 			<key>cell</key>
+			<string>PSGroupCell</string>
+		</dict>
+		<dict>
+			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>default</key>
 			<true/>
@@ -75,6 +79,32 @@
 			<string>vibrateOnSilent</string>
 			<key>label</key>
 			<string>Vibrate on silent</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSegmentCell</string>
+			<key>height</key>
+			<real>50</real>
+			<key>defaults</key>
+			<string>com.jez.minimalPrefs</string>
+			<key>default</key>
+			<string>0</string>
+			<key>key</key>
+			<string>hapticsStrength</string>
+			<key>validValues</key>
+			<array>
+				<string>0</string>
+				<string>1</string>
+				<string>2</string>
+			</array>
+			<key>validTitles</key>
+			<array>
+				<string>Soft</string>
+				<string>Medium</string>
+				<string>Strong</string>
+			</array>
+			<key>id</key>
+			<string>SegmentCell</string>
 		</dict>
 		<dict>
 			<key>cell</key>
