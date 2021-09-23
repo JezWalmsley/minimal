@@ -44,21 +44,21 @@
 			<key>cell</key>
 			<string>PSStaticTextCell</string>
 			<key>label</key>
-			<string>Icon Size</string>
+			<string>Icon Size (Turning it up to max is not advised)</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSSliderCell</string>
 			<key>default</key>
-			<real>40</real>
+			<real>1</real>
 			<key>defaults</key>
 			<string>com.jez.minimalPrefs</string>
 			<key>key</key>
 			<string>iconSize</string>
 			<key>min</key>
-			<real>1</real>
+			<real>0.5</real>
 			<key>max</key>
-			<real>2</real>
+			<real>5</real>
 			<key>showValue</key>
 			<true/>
 			<key>isSegmented</key>
@@ -76,6 +76,34 @@
 			<key>label</key>
 			<string>Vibrate on silent</string>
 		</dict>
+
+		<!-- https://github.com/xyaman/cucu/blob/main/Prefs/Resources/Root.plist#L78 -->
+
+		<dict>
+            <key>cell</key>
+            <string>PSGroupCell</string>
+            <key>label</key>
+            <string>Dismiss Icon after (Thanks xyaman)</string>
+        </dict>
+		<dict>
+    		<key>cellClass</key>
+    		<string>HBStepperTableCell</string>
+    		<key>default</key>
+    		<real>6</real>
+    		<key>defaults</key>
+  		 	<string>com.jez.minimalPrefs</string>
+  		  	<key>key</key>
+   		 	<string>dismissDelay</string>
+   		 	<key>label</key>
+   		 	<string>%i Seconds</string>
+   		 	<key>max</key>
+			<real>30</real>
+    		<key>min</key>
+    		<real>1</real>
+    		<key>singularLabel</key>
+    		<string>1 Second</string>
+		</dict>
+
 		<dict>
 			<key>cell</key>
 			<string>PSGroupCell</string>
