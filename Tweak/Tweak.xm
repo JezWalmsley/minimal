@@ -99,7 +99,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 	}
 	
 	[UIView animateWithDuration:0.15 animations:^{ // Adding the icon is here HELLO
-		if (ringerMuted == YES && vibrateOnSilent == YES) AudioServicesPlaySystemSound(4095);
+		if (ringerMuted == YES && vibrateOnSilent == YES) [self triggerHaptics];
 		for(_UIStatusBarTimeItem *timeItem in timeItems) for(UILabel *label in @[timeItem.timeView, timeItem.shortTimeView, timeItem.pillTimeView, timeItem.dateView]) label.layer.transform = CATransform3DMakeScale(0.01, 0.01, 1);
 	} completion:^(BOOL finished){
 		for(_UIStatusBarTimeItem *timeItem in timeItems) for(UILabel *label in @[timeItem.timeView, timeItem.shortTimeView, timeItem.pillTimeView, timeItem.dateView]) label.hidden = YES;
@@ -161,6 +161,30 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 	fakeNotification([bulletin title], [bulletin sectionID], [NSDate date], [bulletin message], true);  
 
 }
+
+- (void)triggerHaptics {
+
+	switch(hapticsStrength) {
+
+		case 0:
+
+			AudioServicesPlaySystemSound(1519);
+			break;
+
+		case 1:
+
+			AudioServicesPlaySystemSound(1520);
+			break;
+
+		case 2:
+
+			AudioServicesPlaySystemSound(1521);
+			break;
+
+	}
+
+}
+
 @end
 
 @implementation MinimalButton
@@ -268,6 +292,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 	[preferences registerBool:&enabled default:NO forKey:@"Enabled"];
 	if (!enabled) return;
 
+	[preferences registerInteger:&hapticsStrength default:0 forKey:@"hapticsStrength"];
 	[preferences registerDouble:&iconSize default:1 forKey:@"iconSize"];
 	[preferences registerBool:&vibrateOnSilent default:YES forKey:@"vibrateOnSilent"];
 	[preferences registerObject:&dismissDelay default:@(6) forKey:@"dismissDelay"];
