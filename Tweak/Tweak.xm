@@ -140,7 +140,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 		}
 	}];
 
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 6 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, [dismissDelay intValue] * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
 		[UIView animateWithDuration:0.15 animations:^{
 			for(MinimalButton *iconView in iconViews) iconView.layer.transform = CATransform3DMakeScale(0.01, 0.01, 0.01);
 		} completion:^(BOOL finished){
@@ -156,12 +156,10 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 }
 
 - (void)handleTap:(MinimalButton *)button {
-	static dispatch_once_t once;
-	dispatch_once(&once, ^ {
-      	BBBulletin *bulletin = button.presentable.notificationViewController.notificationRequest.bulletin;
-		fakeNotification([bulletin title], [bulletin sectionID], [NSDate date], [bulletin message], true);  
-	});    
 	
+    BBBulletin *bulletin = button.presentable.notificationViewController.notificationRequest.bulletin;
+	fakeNotification([bulletin title], [bulletin sectionID], [NSDate date], [bulletin message], true);  
+
 }
 
 - (void)triggerHaptics {
@@ -277,6 +275,14 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 
 %end
 
+// %hook SBNotificationBannerDestination
+// // https://github.com/xyaman/cucu/blob/main/Tweak/Tweak.x#L142
+// - (id) _startTimerWithDelay:(unsigned long long)arg1 eventHandler:(id)arg2 {
+//     return %orig([dismissDelay intValue], arg2);
+// }
+
+// %end
+
 
 %end
 
@@ -289,6 +295,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
 	[preferences registerInteger:&hapticsStrength default:0 forKey:@"hapticsStrength"];
 	[preferences registerDouble:&iconSize default:1 forKey:@"iconSize"];
 	[preferences registerBool:&vibrateOnSilent default:YES forKey:@"vibrateOnSilent"];
+	[preferences registerObject:&dismissDelay default:@(6) forKey:@"dismissDelay"];
 
 	%init(Minimal)
 }
