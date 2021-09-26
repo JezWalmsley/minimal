@@ -1,8 +1,8 @@
-#import <UIKit/UIKit.h>
+@import UIKit;
 #import <dlfcn.h>
 #import <Cephei/HBPreferences.h>
-#import<AudioToolbox/AudioToolbox.h>
 #import <SpringBoard/SpringBoard.h>
+#import<AudioToolbox/AudioToolbox.h>
 
 HBPreferences* preferences = nil;
 BOOL enabled = NO;
@@ -56,6 +56,7 @@ static NSInteger hapticsStrength;
 @property(nonatomic)BOOL showsMessagePreview;
 @property(nonatomic, copy)BBAction* defaultAction;
 @property(nonatomic, copy)NSString* bulletinID;
+@property (nonatomic, strong) NSDate *expirationDate;
 @property(nonatomic, retain)NSDate* lastInterruptDate;
 @property(nonatomic, retain)NSDate* publicationDate;
 @property(nonatomic, copy)NSString* threadID;
