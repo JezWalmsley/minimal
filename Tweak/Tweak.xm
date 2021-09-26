@@ -37,6 +37,7 @@ static void fakeNotification(NSString *title, NSString *sectionID, NSDate *date,
     bulletin.defaultAction = [%c(BBAction) actionWithLaunchBundleID:sectionID callblock:nil];
     bulletin.clearable = YES;
     bulletin.showsMessagePreview = YES;
+	bulletin.expirationDate = date;
     bulletin.publicationDate = date;
     bulletin.lastInterruptDate = date;
 	if (banner) {
