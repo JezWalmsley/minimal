@@ -2,7 +2,7 @@
 #import <dlfcn.h>
 #import <Cephei/HBPreferences.h>
 #import <SpringBoard/SpringBoard.h>
-#import<AudioToolbox/AudioToolbox.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 HBPreferences* preferences = nil;
 BOOL enabled = NO;
